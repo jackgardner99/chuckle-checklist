@@ -1,8 +1,46 @@
+import { useEffect, useState } from "react"
 import "./App.css"
-import { CreateJoke } from "./components/CreateJoke"
-import { ToldUntoldJokes } from "./components/ToldUntoldJokes"
+import { addJoke, getJokes } from "./services/jokeService"
 
 export const App = () => {
+  const [jokes, setJokes] = useState([])
+  const [newJoke, setNewJoke] = useState({ text: "", told: false })
+  const [toldJokes, setToldJokes] = useState([])
+  const [untoldJokes, setUntoldJokes] = useState([])
+  
+  useEffect(() => {
+    getJokes().then(setJokes)
+  }, [])
+  
+  const handleJokeSubmission = (e) => {
+      e.preventDefault()
+      if (newJoke.text) {
+          const createdJoke = {
+              text: newJoke.text,
+              told: false
+          }
+
+          addJoke(createdJoke).then(() => {
+            getJokes().then(setJokes)
+          })
+          setNewJoke({text: "", told: false})
+      } else {
+          window.alert("Please enter a joke")
+      }
+
+  }
+
+  useEffect(() => {
+        const filteredToldJokes = jokes.filter(joke => joke.told === true)
+        setToldJokes(filteredToldJokes)
+    }, [jokes])
+
+  useEffect(() => {
+        const filteredUntoldJokes = jokes.filter(joke => joke.told === false)
+        setUntoldJokes(filteredUntoldJokes)
+    }, [jokes])
+
+
   return <>
     <div className="app-container">
       <div className="app-heading">
@@ -10,10 +48,39 @@ export const App = () => {
       </div>
       <div>
         <h2>Add Joke</h2>
-        <CreateJoke />
+        <div className="joke-add-form">
+          <input type="text"
+          placeholder="New One Liner"
+          className="joke-input"
+          onChange={(event) => {
+              const copyJoke = {...newJoke}
+              copyJoke.text = event.target.value
+              setNewJoke(copyJoke)
+          }}
+          value={newJoke.text}
+          />
+        <button className="joke-input-submit" onClick={handleJokeSubmission}>Submit Joke</button>
+    </div>
       </div>
       <div>
-        <ToldUntoldJokes />
+        <div className="joke-lists-container">
+          <div className="joke-list-container">
+              <h2>Told<span className="told-count">{toldJokes.length}</span></h2>
+              {toldJokes.map((jokes) => {
+                  return <li className="joke-list-item" key={jokes.id}>
+                      {jokes.text}
+                  </li>
+              })}
+          </div>
+          <div className="joke-list-container">
+              <h2>Untold<span className="untold-count">{untoldJokes.length}</span></h2>
+              {untoldJokes.map((jokes) => {
+                  return <li className="joke-list-item" key={jokes.id}>
+                      {jokes.text}
+                  </li>
+              })}
+          </div>
+        </div>
       </div>
     </div>
   </>

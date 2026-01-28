@@ -30,6 +30,16 @@ export const App = () => {
 
   }
 
+  const handleToldJokeUpdate = (joke) => {
+    const updateJoke = {
+      id: joke.id,
+      text: joke.text,
+      told: true
+    }
+
+    
+  }
+
   useEffect(() => {
         const filteredToldJokes = jokes.filter(joke => joke.told === true)
         setToldJokes(filteredToldJokes)
@@ -66,17 +76,25 @@ export const App = () => {
         <div className="joke-lists-container">
           <div className="joke-list-container">
               <h2>Told<span className="told-count">{toldJokes.length}</span></h2>
-              {toldJokes.map((jokes) => {
-                  return <li className="joke-list-item" key={jokes.id}>
-                      {jokes.text}
+              {toldJokes.map((joke) => {
+                  return <li className="joke-list-item" key={joke.id}>
+                      {joke.text}
+                      <div>
+                        <button className="joke-list-action-toggle"><i className="fa-regular fa-face-meh" /></button>
+                      </div>
                   </li>
               })}
           </div>
           <div className="joke-list-container">
               <h2>Untold<span className="untold-count">{untoldJokes.length}</span></h2>
-              {untoldJokes.map((jokes) => {
-                  return <li className="joke-list-item" key={jokes.id}>
-                      {jokes.text}
+              {untoldJokes.map((joke) => {
+                  return <li className="joke-list-item" key={joke.id}>
+                      {joke.text}
+                      <div>
+                        <button className="joke-list-action-toggle" onClick={(joke) => {
+                          handleToldJokeUpdate(joke)
+                        }}><i className="fa-regular fa-face-laugh" /></button>
+                      </div>
                   </li>
               })}
           </div>

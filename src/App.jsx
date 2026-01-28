@@ -37,8 +37,6 @@ export const App = () => {
       told: true
     }
 
-    console.log(updateJoke)
-
     updateToldJoke(updateJoke).then(() => {
       getJokes().then(setJokes)
     })
@@ -111,7 +109,6 @@ export const App = () => {
                       <div>
                         <button className="joke-list-action-toggle" onClick={() => {
                           handleToldJokeUpdate(joke)
-                          console.log(joke)
                         }}><i className="fa-regular fa-face-laugh" /></button>
                       </div>
                   </li>

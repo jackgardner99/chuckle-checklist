@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import "./App.css"
-import { addJoke, getJokes } from "./services/jokeService"
+import { addJoke, getJokes, updateToldJoke } from "./services/jokeService"
 
 export const App = () => {
   const [jokes, setJokes] = useState([])
@@ -37,7 +37,11 @@ export const App = () => {
       told: true
     }
 
-    
+    console.log(updateJoke)
+
+    updateToldJoke(updateJoke).then(() => {
+      getJokes().then(setJokes)
+    })
   }
 
   useEffect(() => {
@@ -91,8 +95,9 @@ export const App = () => {
                   return <li className="joke-list-item" key={joke.id}>
                       {joke.text}
                       <div>
-                        <button className="joke-list-action-toggle" onClick={(joke) => {
+                        <button className="joke-list-action-toggle" onClick={() => {
                           handleToldJokeUpdate(joke)
+                          console.log(joke)
                         }}><i className="fa-regular fa-face-laugh" /></button>
                       </div>
                   </li>

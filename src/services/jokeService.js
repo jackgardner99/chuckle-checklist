@@ -21,3 +21,13 @@ export const updateToldJoke = (joke) => {
         body: JSON.stringify(joke)
     })
 }
+
+export const updateUntoldJoke = (joke) => {
+    return fetch(`http://localhost:3000/jokes/${joke.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(joke)
+    })
+}

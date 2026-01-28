@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import "./App.css"
-import { addJoke, getJokes, updateToldJoke, updateUntoldJoke } from "./services/jokeService"
+import { addJoke, deleteJoke, getJokes, updateToldJoke, updateUntoldJoke } from "./services/jokeService"
 
 export const App = () => {
   const [jokes, setJokes] = useState([])
@@ -54,6 +54,12 @@ export const App = () => {
     })
   }
 
+  const handleDelete = (joke) => {
+    deleteJoke(joke).then(() => {
+      getJokes().then(setJokes)
+    })
+  }
+
   useEffect(() => {
         const filteredToldJokes = jokes.filter(joke => joke.told === true)
         setToldJokes(filteredToldJokes)
@@ -94,6 +100,11 @@ export const App = () => {
                   return <li className="joke-list-item" key={joke.id}>
                       {joke.text}
                       <div>
+                        <button className="joke-list-action-delete" onClick={() => {
+                          handleDelete(joke)
+                        }}><i className="fa-regular fa-trash-can" /></button>
+                      </div>
+                      <div>
                         <button className="joke-list-action-toggle" onClick={() => {
                           handleUntoldJokeUpdate(joke)
                         }}><i className="fa-regular fa-face-meh" /></button>
@@ -106,6 +117,11 @@ export const App = () => {
               {untoldJokes.map((joke) => {
                   return <li className="joke-list-item" key={joke.id}>
                       {joke.text}
+                      <div>
+                        <button className="joke-list-action-delete" onClick={() => {
+                          handleDelete(joke)
+                        }}><i className="fa-regular fa-trash-can"/></button>
+                      </div>
                       <div>
                         <button className="joke-list-action-toggle" onClick={() => {
                           handleToldJokeUpdate(joke)

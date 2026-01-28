@@ -31,3 +31,12 @@ export const updateUntoldJoke = (joke) => {
         body: JSON.stringify(joke)
     })
 }
+
+export const deleteJoke = (joke) => {
+    return fetch(`http://localhost:3000/jokes/${joke.id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+}
